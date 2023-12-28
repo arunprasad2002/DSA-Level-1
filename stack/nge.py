@@ -48,7 +48,7 @@ def ngel(arr):
         stack.append(arr[i])
     return ans
 arr = [1,3,2,4]
-ans = ngel(arr)
+ans = nge(arr)
 print(ans)
 
 
