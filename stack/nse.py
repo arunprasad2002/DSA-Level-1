@@ -42,7 +42,18 @@ def nser_brute_force(arr):
      return ans
 
 def nser(arr):
-     print(arr)
+     ans = []
+     stack = []
+     for i in range(len(arr) - 1, -1, -1):
+          while len(stack) > 0 and stack[-1] > arr[i]:
+               stack.pop()
+          if len(stack) == 0:
+               ans.append(-1)
+          else:
+               ans.append(stack[-1])
+          stack.append(arr[i])
+     ans.reverse()
+     return ans
 
 
     
