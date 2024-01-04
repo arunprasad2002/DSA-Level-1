@@ -1,3 +1,5 @@
+from collections import deque 
+
 def sliding_window_maximum(arr):
     n = len(arr)
     k = 4
@@ -33,7 +35,31 @@ def sliding_window_maximum_stack(arr, k):
         ans.append(arr[j])
     return ans
 
+def sliding_window_maximum_linear(arr, k):
+    que = deque()
+    left = 0
+    right = 0
+    ans = []
+    
+    while right < len(arr):
+        # pop smaller values from que
+        while que and arr[que[-1]] < arr[right]:
+           que.pop() 
+        que.append(right)
+        # remove left value from window
+        if left > que[0]:
+            que.popleft()
 
-arr = [2, 9, 3, 8, 1, 7, 12, 6, 14, 4, 32, 0, 7, 19, 8, 12, 6]
-ans = sliding_window_maximum_stack(arr, 4)
+        if (right + 1) >= k:
+            ans.append(arr[que[0]])
+            left += 1
+        right += 1
+    return ans
+
+
+
+
+
+arr = [8,7,6,9]
+ans = sliding_window_maximum_linear(arr, 2)
 print(ans)
