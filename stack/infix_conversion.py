@@ -1,53 +1,73 @@
 def precedence(operator):
-    if operator == "+" or operator == "-":
+    if operator == '+' or operator == '-':
         return 1
-    elif operator == "*" or operator == "/":
+    elif operator == '/' or operator == '*':
         return 2
     else:
         return 0
-def compute(a, b, operator):
-    if operator == "+":
-        return a + b
-    elif operator == "-":
-        return a - b
-    elif operator == "*":
-        return a * b
-    elif operator == '/':
-        return a / b
-def infix_evaluation(expression):
+
+def infix_conversion(expression):
+    postfix = []
+    prefix = []
     operators = []
-    operands = []
+
     for char in expression:
-        if char == "(":
+        if char == '(':
             operators.append(char)
-        elif char.isdigit():
-            operands.append(int(char))
+        elif char.isdigit() or char.isalpha():
+            postfix.append(char)
+            prefix.append(char)
         elif char == ")":
             while operators[-1] != "(":
                 operator = operators.pop()
-                b = operands.pop()
-                a = operands.pop()
-                value = compute(a, b, operator)
-                operands.append(value)
-            operators.pop()
+                # process prefix
+                b = prefix.pop()
+                a = prefix.pop()
+                prefix_value = operator + a + b
+                prefix.append(prefix_value)
+
+                # process postfix
+                b = postfix.pop()
+                a = postfix.pop()
+                postfix_value = a + b + operator
+                postfix.append(postfix_value)
+            operators.pop() #Removing (
         elif char in ['+', '-', '*', '/']:
-            while operators and operators[-1] != "(" and precedence(char) <= precedence(operators[-1]):
+            while operators and char != '(' and precedence(char) <= precedence(operators[-1]):
                 operator = operators.pop()
-                b = operands.pop()
-                a = operands.pop()
-                value = compute(a, b, operator)
-                operands.append(value)
+                # process prefix
+                b = prefix.pop()
+                a = prefix.pop()
+                prefix_value = operator + a + b
+                prefix.append(prefix_value)
+
+                # process postfix
+                b = postfix.pop()
+                a = postfix.pop()
+                postfix_value = a + b + operator
+                postfix.append(postfix_value)
             operators.append(char)
-    while len(operators) != 0:
-        operator = operators.pop()
-        b = operands.pop()
-        a = operands.pop()
-        value = compute(a, b, operator)
-        operands.append(value)
-    
-    return operands[0]
 
-    
+    while operators:
+                operator = operators.pop()
+                # process prefix
+                b = prefix.pop()
+                a = prefix.pop()
+                prefix_value = operator + a + b
+                prefix.append(prefix_value)
 
-ans = infix_evaluation('54')
+                # process postfix
+                b = postfix.pop()
+                a = postfix.pop()
+                postfix_value = a + b + operator
+                postfix.append(postfix_value)   
+    return prefix[0], postfix[0]
+
+        
+
+
+
+
+expression = '(3+a)*b-(c/2)'
+ans = infix_conversion(expression)
 print(ans)
