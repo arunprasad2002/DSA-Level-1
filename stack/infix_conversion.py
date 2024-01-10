@@ -49,5 +49,5 @@ def infix_evaluation(expression):
 
     
 
-ans = infix_evaluation('5+4')
+ans = infix_evaluation('54')
 print(ans)
